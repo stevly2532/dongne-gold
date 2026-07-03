@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AppNav } from "@/components/AppNav";
 import { AppProviders } from "@/components/AppProviders";
+import { DEFAULT_BRANCH, SHOP_OWNER_EMAILS } from "@/config/app";
 
 export default async function AppLayout({
   children,
@@ -17,30 +18,52 @@ export default async function AppLayout({
     redirect("/login");
   }
 
+  const isOwner = SHOP_OWNER_EMAILS.some(
+    (email) => email.toLowerCase() === user.email?.toLowerCase(),
+  );
+
   const [profRes, brRes] = await Promise.all([
     supabase
-    .from("profiles")
+      .from("profiles")
       .select("id, full_name, role, branch_id")
       .eq("id", user.id)
       .maybeSingle(),
-    supabase
-      .from("branches")
-      .select("id, name, created_at")
-      .order("name"),
+    supabase.from("branches").select("id, name, created_at").order("name"),
   ]);
 
   const prof = profRes.data;
-  const branches = (brRes.data ?? []) as { id: string; name: string; created_at: string }[];
-  const isAdmin = prof?.role === "admin";
+  let branches = (brRes.data ?? []) as {
+    id: string;
+    name: string;
+    created_at: string;
+  }[];
+
+  if (!branches.length && isOwner) {
+    branches = [
+      {
+        id: DEFAULT_BRANCH.id,
+        name: DEFAULT_BRANCH.name,
+        created_at: new Date(0).toISOString(),
+      },
+    ];
+  }
+
+  const role = (prof?.role ?? (isOwner ? "admin" : "staff")) as
+    | "admin"
+    | "staff";
+  const branchId =
+    prof?.branch_id ??
+    (role === "admin" ? (branches[0]?.id ?? DEFAULT_BRANCH.id) : null);
+  const isAdmin = role === "admin";
 
   return (
     <AppProviders
       bootstrap={{
         profile: {
           id: user.id,
-          full_name: prof?.full_name ?? null,
-          role: (prof?.role ?? "staff") as "admin" | "staff",
-          branch_id: prof?.branch_id ?? null,
+          full_name: prof?.full_name ?? (isOwner ? "관리자" : null),
+          role,
+          branch_id: branchId,
         },
         branches,
       }}
