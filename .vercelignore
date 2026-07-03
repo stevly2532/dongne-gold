@@ -1,0 +1,4 @@
+# Exclude local env files from Vercel CLI uploads (even if present on disk).
+.env
+.env.*
+!.env.example

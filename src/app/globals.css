@@ -1,0 +1,2617 @@
+@import "tailwindcss";
+@import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * 컬러 팔레트 — 토스형 미니멀
+ * ─ 배경 #F2F4F6 · 카드 #FFF · 입력 #F9FAFB
+ * ─ 제목 #191F28 · 라벨 #4E5968 · 보조 #8B95A1
+ * ─ Primary #3182F6 · 출금/마이너스 #F43F5E (rose-500)
+ */
+:root {
+  --background: #f2f4f6;
+  --foreground: #191f28;
+  --label: #4e5968;
+  --card: #ffffff;
+  --card-border: none;
+  --card-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+  --muted: #8b95a1;
+  --border: #e5e8eb;
+  --input-border: #eceef0;
+  --surface-subtle: #f9fafb;
+  --surface-warm: #faf8f5;
+  --surface-cream: #faf8f5;
+  --surface-cream-border: transparent;
+  --radius-card: 16px;
+  --radius-btn: 12px;
+  --radius-input: 12px;
+  --primary: #3182f6;
+  --primary-hover: #1b64da;
+  --primary-foreground: #ffffff;
+  --danger: #f43f5e;
+  --btn-secondary-bg: #f2f4f6;
+  --btn-secondary-hover: #e5e8eb;
+  --btn-secondary-text: #333d4b;
+}
+
+.dark {
+  --background: #111827;
+  --foreground: #f3f4f6;
+  --label: #d1d5db;
+  --card: #1f2937;
+  --card-border: none;
+  --card-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+  --muted: #9ca3af;
+  --border: rgba(255, 255, 255, 0.1);
+  --input-border: transparent;
+  --surface-subtle: #1a2230;
+  --surface-warm: color-mix(in srgb, #faf8f5 8%, var(--card));
+  --surface-cream: color-mix(in srgb, #faf8f5 8%, var(--card));
+  --surface-cream-border: transparent;
+  --primary: #4d9aff;
+  --primary-hover: #3182f6;
+  --primary-foreground: #ffffff;
+  --danger: #fb7185;
+  --btn-secondary-bg: color-mix(in srgb, var(--foreground) 8%, var(--card));
+  --btn-secondary-hover: color-mix(in srgb, var(--foreground) 12%, var(--card));
+  --btn-secondary-text: #e5e7eb;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-danger: var(--danger);
+  --font-sans:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
+    "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
+}
+
+/* ── Toss-style layout shell ── */
+.app-shell {
+  min-height: 100%;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* ── Cards: 테두리 없음 · 그림자만 (purchase-ledger-work-card와 동일) ── */
+.toss-card {
+  background-color: var(--card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--card-shadow);
+  border: none;
+}
+
+.toss-card-sm {
+  background-color: var(--card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--card-shadow);
+  border: none;
+}
+
+/* ── Unified control sizes (h-9 기준) ── */
+.toss-btn-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.25rem;
+  min-height: 2.25rem;
+  padding-inline: 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  font-weight: 600;
+  border-radius: var(--radius-btn);
+}
+
+.toss-btn-md {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.25rem;
+  min-height: 2.25rem;
+  padding-inline: 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1;
+  font-weight: 600;
+  border-radius: var(--radius-btn);
+}
+
+.toss-form-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--label);
+}
+
+.text-danger {
+  color: var(--danger);
+  font-weight: 500;
+}
+
+/** 출금·지급·마이너스 금액 (부드러운 레드) */
+.text-amount-out {
+  color: var(--danger);
+  font-weight: 500;
+}
+
+/** 삭제·위험 링크 */
+.toss-link-danger {
+  color: var(--danger);
+  font-weight: 500;
+}
+
+.toss-link-danger:hover {
+  color: color-mix(in srgb, var(--danger) 82%, var(--foreground));
+  text-decoration: underline;
+}
+
+/** 폼·API 오류 배너 */
+.toss-alert-error {
+  border: none;
+  background-color: color-mix(in srgb, var(--danger) 8%, var(--card));
+  color: color-mix(in srgb, var(--danger) 72%, var(--foreground));
+}
+
+.dark .toss-alert-error {
+  background-color: color-mix(in srgb, var(--danger) 14%, var(--card));
+  color: color-mix(in srgb, var(--danger) 55%, #fecdd3);
+}
+
+/** 다건 등록 합계 칩 (앰버 테두리 없음) */
+.toss-chip-sum {
+  border: none;
+  border-radius: var(--radius-card);
+  background-color: color-mix(in srgb, #fbbf24 14%, var(--surface-subtle));
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.dark .toss-chip-sum {
+  background-color: color-mix(in srgb, #fbbf24 16%, var(--card));
+  color: #fef3c7;
+}
+
+.toss-table-head {
+  background-color: var(--surface-subtle);
+  color: var(--label);
+}
+
+/** 참고 패널 (계산 미리보기·내가 팔 때) — 테두리 없음, 연한 배경만 */
+.toss-highlight-panel {
+  border: none;
+  border-radius: var(--radius-card);
+  background-color: var(--surface-warm);
+  color: var(--foreground);
+}
+
+.toss-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: calc(var(--radius-btn) - 2px);
+  padding: 0.125rem 0.375rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1.2;
+  background-color: color-mix(in srgb, var(--label) 12%, var(--card));
+  color: var(--label);
+}
+
+/* ── Hero numbers (매입금액·시재·이익 등) ── */
+.toss-stat {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 640px) {
+  .toss-stat {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
+
+.toss-stat-lg {
+  font-size: 2rem;
+  line-height: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 640px) {
+  .toss-stat-lg {
+    font-size: 2.75rem;
+    line-height: 3rem;
+  }
+}
+
+/* ── Buttons ── */
+.toss-btn {
+  border-radius: var(--radius-btn);
+  font-weight: 600;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.toss-btn-primary {
+  border-radius: var(--radius-btn);
+  font-weight: 600;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.toss-btn-primary:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.toss-btn-primary:disabled {
+  opacity: 0.5;
+}
+
+/* 긍정 지표·저장 완료 등 — Primary 블루 텍스트만 */
+.text-positive {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.toss-btn-secondary {
+  border-radius: var(--radius-btn);
+  font-weight: 600;
+  border: none;
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+}
+
+.toss-btn-secondary:hover:not(:disabled) {
+  background-color: var(--btn-secondary-hover);
+}
+
+.toss-btn-ghost {
+  border-radius: var(--radius-btn);
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.toss-btn-ghost:hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, transparent);
+  color: var(--foreground);
+}
+
+/* ── Inputs ── */
+.toss-input {
+  border-radius: var(--radius-input);
+  border: 1px solid var(--input-border);
+  background-color: var(--surface-subtle);
+  color: var(--foreground);
+}
+
+.toss-input:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--input-border));
+  background-color: var(--card);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+.toss-input:disabled,
+.toss-input:read-only {
+  opacity: 1;
+  cursor: default;
+  background-color: var(--surface-subtle);
+  color: var(--foreground);
+}
+
+.dark .toss-input {
+  border-color: transparent;
+  background-color: var(--surface-subtle);
+}
+
+.dark .toss-input:focus {
+  border-color: transparent;
+  background-color: color-mix(in srgb, var(--foreground) 5%, var(--card));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+.dark .toss-input:disabled,
+.dark .toss-input:read-only {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--card));
+}
+
+/* ── Nav chrome (Primary 사용 안 함 — 중립 하이라이트) ── */
+.toss-nav {
+  border-bottom: 1px solid var(--border);
+  background-color: color-mix(in srgb, var(--card) 92%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.toss-nav-link {
+  border-radius: 12px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  color: var(--muted);
+}
+
+.toss-nav-link:hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, transparent);
+  color: var(--foreground);
+}
+
+.toss-nav-link-active {
+  border-radius: 12px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background-color: color-mix(in srgb, var(--foreground) 8%, var(--card));
+  color: var(--foreground);
+}
+
+/** TradingView GOLD 티커 — 원본 iframe 균등 축소 (등락률 유지) */
+.nav-gold-ticker {
+  display: none;
+  flex-shrink: 0;
+  align-self: center;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+}
+
+.nav-gold-ticker iframe {
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+@media (min-width: 1024px) {
+  .nav-gold-ticker {
+    display: block;
+  }
+}
+
+/** 다크모드 — light TV 위젯 글자(검정) 대비용, 티커 영역만 옅은 밝은 배경 */
+.dark .nav-gold-ticker {
+  border-radius: 12px;
+  background: color-mix(in srgb, #ffffff 88%, transparent);
+  box-shadow: none;
+}
+
+.gold-accent {
+  color: #b45309;
+}
+
+.dark .gold-accent {
+  color: #fde68a;
+}
+
+/** 패널 안 보조 라벨 (함량명 등) */
+.gold-accent-muted {
+  color: #78716c;
+}
+
+.dark .gold-accent-muted {
+  color: color-mix(in srgb, #fde68a 42%, var(--muted));
+}
+
+/** 패널 안 강조 숫자 (시세·금액) */
+.gold-accent-value {
+  color: var(--foreground);
+}
+
+.dark .gold-accent-value {
+  color: #fef3c7;
+}
+
+.gold-accent-bg {
+  background-color: var(--surface-warm);
+  border-color: transparent;
+}
+
+.dark .gold-accent-bg {
+  background-color: color-mix(in srgb, #451a03 28%, var(--card));
+  border-color: transparent;
+}
+
+.gold-accent-panel {
+  border: none;
+  background-color: var(--surface-warm);
+  color: var(--foreground);
+}
+
+.dark .gold-accent-panel {
+  background-color: color-mix(in srgb, #451a03 30%, var(--card));
+  border-color: transparent;
+  color: var(--foreground);
+}
+
+.gold-accent-highlight {
+  background-color: #fef3c7;
+  color: #78350f;
+}
+
+.dark .gold-accent-highlight {
+  background-color: color-mix(in srgb, #92400e 55%, var(--card));
+  color: #fffbeb;
+}
+
+/* Filter chips — 배경으로만 구분 */
+.toss-filter-active {
+  background-color: color-mix(in srgb, var(--primary) 12%, var(--card));
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.toss-filter-active:hover {
+  background-color: color-mix(in srgb, var(--primary) 16%, var(--card));
+}
+
+.dark .toss-filter-active {
+  background-color: color-mix(in srgb, var(--primary) 20%, var(--card));
+  border: none;
+  color: #93c5fd;
+}
+
+.dark .toss-filter-active:hover {
+  background-color: color-mix(in srgb, var(--primary) 26%, var(--card));
+}
+
+.toss-filter-inactive {
+  background-color: transparent;
+  border: none;
+  color: var(--muted);
+}
+
+.toss-filter-inactive:hover {
+  background-color: var(--surface-subtle);
+  color: var(--label);
+}
+
+/** 필터 칩 활성 — 앰버 (연도·오늘만 등) */
+.toss-filter-amber {
+  background-color: rgb(254 243 199);
+  border: none;
+  color: rgb(69 26 3);
+  font-weight: 600;
+}
+
+.toss-filter-amber:hover {
+  background-color: rgb(253 230 138);
+}
+
+.dark .toss-filter-amber {
+  background-color: color-mix(in srgb, rgb(251 191 36) 22%, var(--card));
+  border: none;
+  color: rgb(255 251 235);
+}
+
+.dark .toss-filter-amber:hover {
+  background-color: color-mix(in srgb, rgb(251 191 36) 30%, var(--card));
+}
+
+/* Subtle inset panels */
+.toss-muted-panel {
+  border: none;
+  border-radius: var(--radius-card);
+  background-color: var(--surface-subtle);
+  color: var(--foreground);
+}
+
+.toss-summary-highlight {
+  border: none;
+  background-color: var(--surface-warm);
+  color: var(--foreground);
+  font-weight: 700;
+}
+
+.dark .toss-summary-highlight {
+  background-color: var(--surface-warm);
+  border: none;
+}
+
+/* ── 기간 선택 UI (통상·AS 장부 공통, 토스 핀테크 pill) ── */
+.tongsang-period-panel {
+  border: none;
+  border-radius: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+  padding: 1.75rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .tongsang-period-panel {
+    padding: 2rem 1.75rem;
+  }
+}
+
+.dark .tongsang-period-panel {
+  background-color: var(--card);
+}
+
+.tongsang-period-title {
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #191f28;
+  line-height: 1.25;
+}
+
+@media (min-width: 1024px) {
+  .tongsang-period-title {
+    font-size: 1.5rem;
+  }
+}
+
+.dark .tongsang-period-title {
+  color: var(--foreground);
+}
+
+.tongsang-period-desc {
+  margin-top: 0.625rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: #8b95a1;
+}
+
+@media (min-width: 640px) {
+  .tongsang-period-desc {
+    font-size: 0.875rem;
+  }
+}
+
+.tongsang-period-section-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #191f28;
+}
+
+.dark .tongsang-period-section-label {
+  color: var(--foreground);
+}
+
+.tongsang-pill {
+  border: none;
+  border-radius: 9999px;
+  padding: 0.625rem 1.125rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.2;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.tongsang-pill-active {
+  background-color: #3182f6;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.tongsang-pill-active:hover {
+  background-color: #1b64da;
+}
+
+.tongsang-pill-inactive {
+  background-color: #f2f4f6;
+  color: #4e5968;
+}
+
+.tongsang-pill-inactive:hover {
+  background-color: #e8ebef;
+  color: #333d4b;
+}
+
+.dark .tongsang-pill-active {
+  background-color: var(--primary);
+  color: #ffffff;
+}
+
+.dark .tongsang-pill-active:hover {
+  background-color: var(--primary-hover);
+}
+
+.dark .tongsang-pill-inactive {
+  background-color: var(--surface-subtle);
+  color: var(--muted);
+}
+
+.dark .tongsang-pill-inactive:hover {
+  background-color: color-mix(in srgb, var(--foreground) 8%, var(--card));
+  color: var(--foreground);
+}
+
+.tongsang-pill-ghost {
+  border: none;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #3182f6;
+  background-color: transparent;
+  transition: background-color 0.15s ease;
+}
+
+.tongsang-pill-ghost:hover {
+  background-color: color-mix(in srgb, #3182f6 8%, #ffffff);
+}
+
+.dark .tongsang-pill-ghost {
+  color: #93c5fd;
+}
+
+.dark .tongsang-pill-ghost:hover {
+  background-color: color-mix(in srgb, var(--primary) 14%, var(--card));
+}
+
+.tongsang-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+@media (min-width: 640px) {
+  .tongsang-pill-row {
+    gap: 0.75rem;
+  }
+}
+
+/* ── 통상 · 일 마감 / 일별 기록 워크스페이스 ── */
+.tongsang-work-card {
+  border: none;
+  border-radius: 20px;
+  background-color: var(--card);
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem;
+  overflow: visible;
+}
+
+.tongsang-entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0.375rem 0.5rem 0.5rem 0.375rem;
+  margin: -0.375rem -0.5rem -0.5rem -0.375rem;
+}
+
+@media (min-width: 640px) {
+  .tongsang-work-card {
+    padding: 1.75rem;
+  }
+}
+
+.dark .tongsang-work-card {
+  background-color: var(--card);
+}
+
+.tongsang-work-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #191f28;
+  line-height: 1.25;
+}
+
+@media (min-width: 640px) {
+  .tongsang-work-card-title {
+    font-size: 1.375rem;
+  }
+}
+
+.dark .tongsang-work-card-title {
+  color: var(--foreground);
+}
+
+.tongsang-work-card-sub {
+  margin-top: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: #8b95a1;
+}
+
+.tongsang-field-label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #8b95a1;
+  letter-spacing: 0.01em;
+}
+
+.tongsang-field-input {
+  margin-top: 0.375rem;
+  height: 2.5rem;
+  width: 100%;
+  min-width: 0;
+  border: none;
+  border-radius: 12px;
+  background-color: #f2f4f6;
+  padding: 0 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #191f28;
+  outline: none;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tongsang-field-input:focus {
+  background-color: #e8ebef;
+  box-shadow: 0 0 0 2px color-mix(in srgb, #3182f6 25%, transparent);
+}
+
+.dark .tongsang-field-input {
+  background-color: var(--surface-subtle);
+  color: var(--foreground);
+}
+
+.tongsang-karat-card {
+  border: none;
+  border-radius: 16px;
+  background-color: #f2f4f6;
+  padding: 1rem 1.125rem;
+}
+
+.dark .tongsang-karat-card {
+  background-color: var(--surface-subtle);
+}
+
+.tongsang-karat-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background-color: #ffffff;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #191f28;
+}
+
+.dark .tongsang-karat-badge {
+  background-color: var(--card);
+}
+
+.tongsang-karat-num {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #191f28;
+  font-variant-numeric: tabular-nums;
+}
+
+.dark .tongsang-karat-num {
+  color: var(--foreground);
+}
+
+@media (min-width: 640px) {
+  .tongsang-karat-num {
+    font-size: 1.25rem;
+  }
+}
+
+.tongsang-karat-num-accent {
+  color: #3182f6;
+}
+
+.dark .tongsang-karat-num-accent {
+  color: #60a5fa;
+}
+
+.tongsang-karat-total {
+  border: none;
+  border-radius: 16px;
+  background: color-mix(in srgb, #3182f6 8%, #ffffff);
+  padding: 1rem 1.125rem;
+}
+
+.dark .tongsang-karat-total {
+  background: color-mix(in srgb, var(--primary) 14%, var(--card));
+}
+
+.tongsang-shipment-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 14px;
+  background-color: #f2f4f6;
+  padding: 0.625rem 0.75rem;
+}
+
+.dark .tongsang-shipment-row {
+  background-color: var(--surface-subtle);
+}
+
+.tongsang-shipment-row .tongsang-field-input {
+  margin-top: 0;
+  flex: 1 1 8rem;
+  height: 2.25rem;
+  font-size: 0.8125rem;
+}
+
+/* 일 마감 장부 — 한 화면에 맞추는 컴팩트 레이아웃 */
+.tongsang-work-card--compact {
+  padding: 1.125rem 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .tongsang-work-card--compact {
+    padding: 1.25rem 1.375rem;
+  }
+}
+
+.tongsang-work-card--compact .tongsang-work-card-title {
+  font-size: 1.125rem;
+}
+
+.tongsang-work-card--compact .tongsang-work-card-sub {
+  margin-top: 0.25rem;
+  font-size: 0.6875rem;
+}
+
+.tongsang-work-card--compact .tongsang-field-input {
+  margin-top: 0.25rem;
+  height: 2.125rem;
+  font-size: 0.8125rem;
+  border-radius: 10px;
+}
+
+.tongsang-karat-block {
+  border: none;
+  border-radius: 14px;
+  background-color: #f2f4f6;
+  padding: 0.625rem 0.75rem;
+}
+
+.dark .tongsang-karat-block {
+  background-color: var(--surface-subtle);
+}
+
+.tongsang-karat-block-head {
+  display: grid;
+  grid-template-columns: 2.25rem repeat(4, minmax(0, 1fr));
+  gap: 0.375rem 0.5rem;
+  padding: 0 0.125rem 0.375rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #8b95a1;
+}
+
+.tongsang-karat-block-head > span:not(:first-child) {
+  text-align: center;
+}
+
+.tongsang-karat-block-row {
+  display: grid;
+  grid-template-columns: 2.25rem repeat(4, minmax(0, 1fr));
+  gap: 0.375rem 0.5rem;
+  align-items: center;
+  padding: 0.25rem 0.125rem;
+}
+
+.tongsang-karat-block-row .tongsang-field-input {
+  text-align: center;
+}
+
+.tongsang-karat-block-row + .tongsang-karat-block-row {
+  border-top: 1px solid color-mix(in srgb, #8b95a1 12%, transparent);
+}
+
+.tongsang-karat-block-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  min-width: 2rem;
+  border-radius: 9999px;
+  background-color: #ffffff;
+  padding: 0.125rem 0.375rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #191f28;
+}
+
+.dark .tongsang-karat-block-badge {
+  background-color: var(--card);
+}
+
+.tongsang-karat-block-num {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #191f28;
+  font-variant-numeric: tabular-nums;
+}
+
+.tongsang-karat-block-total {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 0.75rem;
+  margin-top: 0.375rem;
+  padding: 0.5rem 0.375rem 0.125rem;
+  border-top: 1px solid color-mix(in srgb, #3182f6 18%, transparent);
+  text-align: center;
+}
+
+.tongsang-karat-block-total .tongsang-field-label {
+  display: block;
+  text-align: center;
+}
+
+.tongsang-karat-block-total .tongsang-karat-num {
+  margin-top: 0.125rem;
+  font-size: 1rem;
+}
+
+.tongsang-shipment-block {
+  border: none;
+  border-radius: 14px;
+  background-color: #f2f4f6;
+  padding: 0.625rem 0.75rem;
+}
+
+.dark .tongsang-shipment-block {
+  background-color: var(--surface-subtle);
+}
+
+.tongsang-shipment-block-head {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 0.375rem 0.5rem;
+  padding: 0 0.125rem 0.375rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #8b95a1;
+}
+
+.tongsang-shipment-block-head > span:not(:first-child) {
+  text-align: center;
+}
+
+.tongsang-shipment-block-row {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 0.375rem 0.5rem;
+  align-items: center;
+  padding: 0.25rem 0.125rem;
+}
+
+.tongsang-shipment-block-row .tongsang-field-input {
+  text-align: center;
+}
+
+.tongsang-shipment-block-row + .tongsang-shipment-block-row {
+  border-top: 1px solid color-mix(in srgb, #8b95a1 12%, transparent);
+}
+
+.tongsang-shipment-slot-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #8b95a1;
+  font-variant-numeric: tabular-nums;
+}
+
+.tongsang-entry-card {
+  width: 100%;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background-color: #f2f4f6;
+  padding: 1rem 1.125rem;
+  text-align: left;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.tongsang-entry-card:hover:not(.tongsang-entry-card-selected) {
+  background-color: #eceef1;
+  border-color: color-mix(in srgb, #8b95a1 14%, transparent);
+}
+
+.tongsang-entry-card-selected {
+  background-color: #ffffff;
+  border-color: color-mix(in srgb, #3182f6 28%, #d1d6db);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, #3182f6 12%, transparent);
+}
+
+.tongsang-entry-card-selected .tongsang-entry-date {
+  color: #1b64da;
+}
+
+.dark .tongsang-entry-card {
+  background-color: var(--surface-subtle);
+  border-color: transparent;
+}
+
+.dark .tongsang-entry-card:hover:not(.tongsang-entry-card-selected) {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--card));
+  border-color: color-mix(in srgb, var(--foreground) 10%, var(--border));
+}
+
+.dark .tongsang-entry-card-selected {
+  background-color: var(--card);
+  border-color: color-mix(in srgb, var(--primary) 32%, var(--border));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+.dark .tongsang-entry-card-selected .tongsang-entry-date {
+  color: color-mix(in srgb, var(--primary) 82%, #ffffff);
+}
+
+.tongsang-entry-date {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #191f28;
+  font-variant-numeric: tabular-nums;
+}
+
+.tongsang-entry-card-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.tongsang-entry-card-cols {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .tongsang-entry-card-row {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.875rem;
+  }
+
+  .tongsang-entry-date {
+    flex-shrink: 0;
+    width: 4.5rem;
+    font-size: 0.875rem;
+    line-height: 1.2;
+  }
+
+  .tongsang-entry-card-cols {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 0.75rem;
+  }
+}
+
+.dark .tongsang-entry-date {
+  color: var(--foreground);
+}
+
+.tongsang-entry-col-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #8b95a1;
+}
+
+.dark .tongsang-entry-col-label {
+  color: var(--muted);
+}
+
+.tongsang-entry-shipment-text {
+  font-size: 0.625rem;
+  line-height: 1.35;
+  font-weight: 500;
+  color: #4e5968;
+}
+
+@media (min-width: 640px) {
+  .tongsang-entry-shipment-text {
+    font-size: 0.6875rem;
+  }
+}
+
+.dark .tongsang-entry-shipment-text {
+  color: color-mix(in srgb, var(--foreground) 78%, var(--muted));
+}
+
+.tongsang-btn-muted {
+  border: none;
+  border-radius: 12px;
+  background-color: #f2f4f6;
+  padding: 0.625rem 1.125rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4e5968;
+  transition: background-color 0.15s ease;
+}
+
+.tongsang-btn-muted:hover:not(:disabled) {
+  background-color: #e8ebef;
+}
+
+.tongsang-btn-muted:disabled {
+  opacity: 0.5;
+}
+
+.dark .tongsang-btn-muted {
+  background-color: var(--surface-subtle);
+  color: var(--muted);
+}
+
+.tongsang-guide-text {
+  font-size: 0.6875rem;
+  line-height: 1.55;
+  color: #8b95a1;
+}
+
+/* ── 일일 마감 (통상·AS와 동일 토스 톤) ── */
+.closing-top-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 1024px) {
+  .closing-top-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+}
+
+.closing-top-grid .closing-metal-grid {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1280px) {
+  .closing-top-grid .closing-metal-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.closing-metal-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .closing-metal-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+}
+
+.closing-breakdown-block--compact {
+  padding: 0.5rem 0.625rem;
+  border-radius: 12px;
+}
+
+.closing-breakdown-block--compact .closing-breakdown-title {
+  font-size: 0.8125rem;
+}
+
+.closing-metal-grid .closing-breakdown-row {
+  gap: 0.375rem;
+  padding: 0.3125rem 0;
+  font-size: 0.75rem;
+}
+
+.closing-metal-grid .closing-breakdown-row > span:first-child {
+  font-size: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.closing-metal-grid .closing-breakdown-row > span:last-child {
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.closing-metal-grid .closing-pure-don-admin {
+  font-size: 11px;
+}
+
+.closing-metal-grid .closing-pure-don-staff {
+  font-size: 11px;
+}
+
+/** 일일 마감 당일 매입 — 직원 순금돈수 강조 */
+.closing-pure-don-staff {
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.dark .closing-pure-don-staff {
+  color: #60a5fa;
+}
+
+.closing-stat-tile {
+  border-radius: 14px;
+  background-color: #f2f4f6;
+  padding: 0.75rem 0.875rem;
+}
+
+.dark .closing-stat-tile {
+  background-color: var(--surface-subtle);
+}
+
+/** 일일 마감 — 시재 확인 계산 흐름 */
+.closing-vault-calc {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.closing-vault-calc--ledger .closing-vault-ledger {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.closing-vault-ledger-item {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.closing-vault-ledger-op {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #8b95a1;
+  background-color: color-mix(in srgb, #8b95a1 12%, #ffffff);
+}
+
+.dark .closing-vault-ledger-op {
+  background-color: color-mix(in srgb, var(--muted) 18%, var(--card));
+  color: var(--muted);
+}
+
+.closing-vault-ledger-op--minus {
+  color: #e11d48;
+  background-color: color-mix(in srgb, #e11d48 10%, #ffffff);
+}
+
+.dark .closing-vault-ledger-op--minus {
+  color: #fb7185;
+  background-color: color-mix(in srgb, #fb7185 14%, var(--card));
+}
+
+.closing-vault-ledger-op--plus {
+  color: #059669;
+  background-color: color-mix(in srgb, #059669 10%, #ffffff);
+}
+
+.dark .closing-vault-ledger-op--plus {
+  color: #34d399;
+  background-color: color-mix(in srgb, #34d399 14%, var(--card));
+}
+
+.closing-vault-ledger-op--misc {
+  color: #7c3aed;
+  background-color: color-mix(in srgb, #7c3aed 10%, #ffffff);
+  font-size: 0.875rem;
+}
+
+.dark .closing-vault-ledger-op--misc {
+  color: #c4b5fd;
+  background-color: color-mix(in srgb, #c4b5fd 14%, var(--card));
+}
+
+.closing-vault-ledger-main--misc {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.625rem 0.75rem;
+}
+
+.closing-vault-ledger-misc-read {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.closing-vault-misc-oneline {
+  display: grid;
+  grid-template-columns: 3.25rem 1fr 9.5rem;
+  align-items: center;
+  column-gap: 0.625rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.closing-vault-misc-oneline--edit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.closing-vault-misc-label-col {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.375rem;
+  flex-shrink: 0;
+  min-width: 6.75rem;
+}
+
+.closing-vault-misc-note-wrap {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.closing-vault-misc-amount-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.375rem;
+  flex-shrink: 0;
+}
+
+.closing-vault-misc-oneline-tag {
+  flex-shrink: 0;
+  min-width: 3.25rem;
+}
+
+.closing-vault-misc-oneline-amount {
+  justify-self: end;
+  text-align: right;
+}
+
+.closing-vault-misc-oneline-note {
+  justify-self: center;
+  width: 7rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #8b95a1;
+  text-align: center;
+}
+
+.dark .closing-vault-misc-oneline-note {
+  color: color-mix(in srgb, var(--muted) 88%, transparent);
+}
+
+.closing-vault-misc-add-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.closing-vault-ledger-item--misc-add .closing-vault-ledger-main--misc {
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+}
+
+.closing-vault-ledger-misc-edit {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.closing-vault-misc-edit-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.closing-vault-misc-add-btn {
+  flex-shrink: 0;
+  height: 1.375rem;
+  padding: 0 0.375rem;
+  border-radius: 0.375rem;
+  border: 1px solid color-mix(in srgb, #8b95a1 35%, transparent);
+  background: color-mix(in srgb, #ffffff 70%, transparent);
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1;
+  color: #4e5968;
+  white-space: nowrap;
+}
+
+.closing-vault-misc-add-btn:hover {
+  background: color-mix(in srgb, #3182f6 8%, #ffffff);
+  border-color: color-mix(in srgb, #3182f6 22%, transparent);
+  color: #3182f6;
+}
+
+.dark .closing-vault-misc-add-btn {
+  background: color-mix(in srgb, var(--card) 80%, transparent);
+  border-color: color-mix(in srgb, var(--muted) 35%, transparent);
+  color: var(--muted);
+}
+
+.dark .closing-vault-misc-add-btn:hover {
+  background: color-mix(in srgb, #3182f6 12%, var(--card));
+  color: #60a5fa;
+}
+
+.closing-vault-misc-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.closing-vault-misc-row {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr auto;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.closing-vault-misc-remove-btn {
+  height: 1.375rem;
+  padding: 0 0.375rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgb(254 202 202);
+  background: rgb(255 255 255);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: rgb(190 18 60);
+  white-space: nowrap;
+}
+
+.closing-vault-misc-remove-btn:hover {
+  background: rgb(255 241 242);
+}
+
+.closing-vault-misc-remove-spacer {
+  width: 2.5rem;
+  flex-shrink: 0;
+}
+
+.closing-vault-misc-sum {
+  margin: 0;
+  padding-top: 0.125rem;
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgb(87 83 78);
+}
+
+.closing-vault-ledger-sub--only {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgb(87 83 78);
+}
+
+.closing-vault-ledger-op--spacer {
+  visibility: hidden;
+}
+
+.closing-vault-ledger-misc-edit-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.closing-vault-misc-oneline--edit .closing-vault-misc-note-input,
+.closing-vault-misc-oneline--edit .closing-vault-misc-amount-input {
+  text-align: center;
+}
+
+.closing-vault-misc-oneline--edit .closing-vault-misc-note-input::placeholder,
+.closing-vault-misc-oneline--edit .closing-vault-misc-amount-input::placeholder {
+  text-align: center;
+  font-weight: 500;
+  color: #8b95a1;
+}
+
+.closing-vault-misc-oneline--edit .closing-vault-misc-note-input {
+  height: 2rem;
+  width: 7rem;
+  max-width: 100%;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.closing-vault-misc-amount-input {
+  width: 9.5rem;
+  max-width: 42vw;
+  min-height: 1.2rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.closing-vault-misc-amount-input:focus {
+  outline: none;
+  box-shadow: inset 0 -1px 0 color-mix(in srgb, #3182f6 55%, transparent);
+}
+
+.dark .closing-vault-misc-amount-input::placeholder {
+  color: var(--muted);
+}
+
+.closing-vault-misc-note-input {
+  height: 2rem;
+  width: 100%;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.closing-vault-ledger-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 0.625rem 0.75rem;
+}
+
+.closing-vault-ledger-label {
+  min-width: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #4e5968;
+}
+
+.dark .closing-vault-ledger-label {
+  color: var(--muted);
+}
+
+.closing-vault-ledger-sub {
+  display: block;
+  margin-top: 0.125rem;
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: #8b95a1;
+}
+
+.dark .closing-vault-ledger-sub {
+  color: color-mix(in srgb, var(--muted) 88%, transparent);
+}
+
+.closing-vault-ledger-amount {
+  flex-shrink: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  color: #191f28;
+  text-align: right;
+}
+
+@media (min-width: 640px) {
+  .closing-vault-ledger-amount {
+    font-size: 0.9375rem;
+  }
+}
+
+.dark .closing-vault-ledger-amount {
+  color: var(--foreground);
+}
+
+.closing-vault-ledger-item--base .closing-vault-ledger-main {
+  border: 1px solid color-mix(in srgb, #3182f6 18%, transparent);
+}
+
+.closing-vault-calc--ledger .closing-vault-calc-result {
+  margin-top: 0.125rem;
+  border-top: 1px dashed color-mix(in srgb, #8b95a1 28%, transparent);
+  padding-top: 0.875rem;
+}
+
+.dark .closing-vault-calc--ledger .closing-vault-calc-result {
+  border-top-color: color-mix(in srgb, var(--muted) 35%, transparent);
+}
+
+.closing-vault-calc-result {
+  border-radius: 14px;
+  background-color: color-mix(in srgb, #3182f6 10%, #f2f4f6);
+  padding: 0.875rem 1rem;
+  text-align: center;
+}
+
+.dark .closing-vault-calc-result {
+  background-color: color-mix(in srgb, var(--primary) 14%, var(--surface-subtle));
+}
+
+.closing-vault-calc-result-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4e5968;
+}
+
+.dark .closing-vault-calc-result-label {
+  color: var(--muted);
+}
+
+.closing-vault-calc-result-amount {
+  margin-top: 0.25rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 640px) {
+  .closing-vault-calc-result-amount {
+    font-size: 1.75rem;
+  }
+}
+
+.dark .closing-vault-calc-result-amount:not(.tongsang-karat-num-accent) {
+  color: var(--foreground);
+}
+
+.closing-status-ok {
+  border-radius: 14px;
+  background-color: color-mix(in srgb, #3182f6 8%, #ffffff);
+  padding: 0.75rem 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #191f28;
+}
+
+.dark .closing-status-ok {
+  background-color: color-mix(in srgb, var(--primary) 14%, var(--card));
+  color: var(--foreground);
+}
+
+.closing-status-warn {
+  border-radius: 14px;
+  background-color: #f2f4f6;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #4e5968;
+}
+
+.dark .closing-status-warn {
+  background-color: var(--surface-subtle);
+  color: var(--muted);
+}
+
+.closing-breakdown-block {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  border: none;
+  border-radius: 14px;
+  background-color: #f2f4f6;
+  padding: 0.75rem 0.875rem;
+}
+
+.dark .closing-breakdown-block {
+  background-color: var(--surface-subtle);
+}
+
+.closing-breakdown-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #191f28;
+}
+
+.dark .closing-breakdown-title {
+  color: var(--foreground);
+}
+
+.closing-breakdown-row {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-top: 1px solid color-mix(in srgb, #8b95a1 12%, transparent);
+  padding: 0.4375rem 0;
+  font-size: 0.8125rem;
+}
+
+.closing-breakdown-row:first-of-type {
+  border-top: none;
+  padding-top: 0.25rem;
+}
+
+/** 일일 마감 당일 매입 — 관리자 전용 순금돈수 */
+.closing-pure-don-admin {
+  font-weight: 600;
+  color: #6d28d9;
+}
+
+.dark .closing-pure-don-admin {
+  color: #c4b5fd;
+}
+
+.closing-total-bar {
+  border-radius: 14px;
+  background-color: color-mix(in srgb, #3182f6 8%, #f2f4f6);
+  padding: 0.625rem 0.875rem;
+  font-size: 0.8125rem;
+  color: #191f28;
+}
+
+.dark .closing-total-bar {
+  background-color: color-mix(in srgb, var(--primary) 12%, var(--surface-subtle));
+  color: var(--foreground);
+}
+
+.closing-table-wrap {
+  overflow-x: auto;
+  border-radius: 14px;
+  background-color: #f2f4f6;
+  padding: 0.375rem 0.5rem;
+}
+
+.dark .closing-table-wrap {
+  background-color: var(--surface-subtle);
+}
+
+.closing-table-wrap table {
+  width: 100%;
+  min-width: 36rem;
+  border-collapse: collapse;
+}
+
+.closing-table-wrap thead th {
+  padding: 0.5rem 0.625rem;
+  text-align: left;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #8b95a1;
+}
+
+.closing-table-wrap thead th:not(:first-child) {
+  text-align: right;
+}
+
+.closing-table-wrap tbody td {
+  padding: 0.5rem 0.625rem;
+  border-top: 1px solid color-mix(in srgb, #8b95a1 10%, transparent);
+  font-size: 0.8125rem;
+  color: #191f28;
+  font-variant-numeric: tabular-nums;
+}
+
+.dark .closing-table-wrap tbody td {
+  color: var(--foreground);
+}
+
+.closing-table-wrap tbody td:not(:first-child) {
+  text-align: right;
+}
+
+.closing-check-label {
+  display: flex;
+  cursor: pointer;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #191f28;
+}
+
+.dark .closing-check-label {
+  color: var(--foreground);
+}
+
+.closing-check-label input[type="checkbox"] {
+  margin-top: 0.125rem;
+  height: 1rem;
+  width: 1rem;
+  flex-shrink: 0;
+  border-radius: 0.25rem;
+  border: none;
+  accent-color: #3182f6;
+}
+
+/* ── 매입장부 · 토스 핀테크 워크스페이스 ── */
+.purchase-ledger-page {
+  background-color: #f2f4f6;
+  border-radius: 20px;
+  padding-top: 0.25rem;
+  padding-bottom: 2rem;
+}
+
+.dark .purchase-ledger-page {
+  background-color: var(--background);
+}
+
+.purchase-ledger-header-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #191f28;
+  line-height: 1.25;
+}
+
+@media (min-width: 640px) {
+  .purchase-ledger-header-title {
+    font-size: 1.625rem;
+  }
+}
+
+.dark .purchase-ledger-header-title {
+  color: var(--foreground);
+}
+
+.purchase-ledger-header-desc {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: #8b95a1;
+}
+
+.purchase-ledger-tab-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  border: none;
+  border-radius: 9999px;
+  background-color: #f2f4f6;
+  padding: 0.25rem;
+}
+
+.dark .purchase-ledger-tab-group {
+  background-color: var(--surface-subtle);
+}
+
+.purchase-ledger-tab {
+  border: none;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.2;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.purchase-ledger-tab-active {
+  background-color: #ffffff;
+  color: #191f28;
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.purchase-ledger-tab-inactive {
+  background-color: transparent;
+  color: #8b95a1;
+}
+
+.purchase-ledger-tab-inactive:hover {
+  color: #4e5968;
+}
+
+.dark .purchase-ledger-tab-active {
+  background-color: var(--card);
+  color: var(--foreground);
+}
+
+.dark .purchase-ledger-tab-inactive {
+  color: var(--muted);
+}
+
+.purchase-ledger-work-card {
+  border: none;
+  border-radius: 22px;
+  background-color: var(--card);
+  box-shadow: var(--card-shadow);
+  padding: 1.375rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .purchase-ledger-work-card {
+    padding: 1.5rem 1.75rem;
+  }
+}
+
+.dark .purchase-ledger-work-card {
+  background-color: var(--card);
+}
+
+.purchase-ledger-section-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #191f28;
+}
+
+.dark .purchase-ledger-section-label {
+  color: var(--foreground);
+}
+
+/* 12개월 pill — 좌측 카드 너비에서 한 줄 유지 */
+.purchase-ledger-month-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.purchase-ledger-month-row .tongsang-pill {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0.375rem 0.125rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .purchase-ledger-month-row {
+    gap: 0.3125rem;
+  }
+
+  .purchase-ledger-month-row .tongsang-pill {
+    padding: 0.4375rem 0.25rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .purchase-ledger-month-row .tongsang-pill {
+    padding: 0.4375rem 0.375rem;
+    font-size: 0.8125rem;
+  }
+}
+
+.purchase-ledger-field-label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #8b95a1;
+}
+
+.purchase-ledger-field-input {
+  margin-top: 0.375rem;
+  height: 2.5rem;
+  width: 100%;
+  min-width: 0;
+  border: none;
+  border-radius: 12px;
+  background-color: #f2f4f6;
+  padding: 0 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #191f28;
+  outline: none;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.purchase-ledger-field-input:focus {
+  background-color: #e8ebef;
+  box-shadow: 0 0 0 2px color-mix(in srgb, #3182f6 25%, transparent);
+}
+
+.purchase-ledger-field-input:disabled {
+  opacity: 0.65;
+}
+
+.dark .purchase-ledger-field-input {
+  background-color: var(--surface-subtle);
+  color: var(--foreground);
+}
+
+.purchase-ledger-btn-primary {
+  border: none;
+  border-radius: 9999px;
+  background-color: #3182f6;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+  transition: background-color 0.15s ease;
+}
+
+.purchase-ledger-btn-primary:hover:not(:disabled) {
+  background-color: #1b64da;
+}
+
+.purchase-ledger-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.purchase-ledger-btn-muted {
+  border: none;
+  border-radius: 9999px;
+  background-color: #f2f4f6;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4e5968;
+  transition: background-color 0.15s ease;
+}
+
+.purchase-ledger-btn-muted:hover:not(:disabled) {
+  background-color: #e8ebef;
+}
+
+.dark .purchase-ledger-btn-muted {
+  background-color: var(--surface-subtle);
+  color: var(--muted);
+}
+
+.purchase-ledger-stat-block {
+  margin-top: 2rem;
+}
+
+.purchase-ledger-stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #8b95a1;
+}
+
+.purchase-ledger-stat-value {
+  margin-top: 0.375rem;
+  font-size: clamp(2rem, 4.5vw, 2.375rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: #191f28;
+  font-variant-numeric: tabular-nums;
+}
+
+.purchase-ledger-stat-value-accent {
+  color: #3182f6;
+}
+
+.dark .purchase-ledger-stat-value {
+  color: var(--foreground);
+}
+
+.purchase-ledger-profit-panel {
+  margin-top: 1.5rem;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.purchase-ledger-profit-panel .purchase-ledger-section-label {
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.purchase-ledger-profit-panel-empty {
+  border-radius: 16px;
+  background-color: #f9fafb;
+  padding: 0.875rem 1rem;
+}
+
+.dark .purchase-ledger-profit-panel-empty {
+  background-color: var(--surface-subtle);
+}
+
+.purchase-ledger-profit-panel-date {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #b0b8c1;
+}
+
+.dark .purchase-ledger-profit-panel-date {
+  color: color-mix(in srgb, var(--muted) 70%, transparent);
+}
+
+.purchase-ledger-profit-panel-fill {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.purchase-ledger-profit-panel-fill .purchase-ledger-profit-row {
+  flex: 1 1 auto;
+  align-items: stretch;
+}
+
+.purchase-ledger-profit-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .purchase-ledger-profit-row {
+    gap: 0.625rem;
+  }
+}
+
+.purchase-ledger-profit-sub {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: none;
+  border-radius: 18px;
+  background-color: #f9fafb;
+  padding: 0.875rem;
+  box-shadow: none;
+  min-width: 0;
+  container-type: inline-size;
+  container-name: profit-sub;
+}
+
+@media (min-width: 640px) {
+  .purchase-ledger-profit-sub {
+    padding: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .purchase-ledger-profit-sub {
+    padding: 1.5rem;
+  }
+}
+
+.dark .purchase-ledger-profit-sub {
+  background-color: var(--surface-subtle);
+}
+
+.purchase-ledger-profit-sub-label {
+  width: 100%;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  color: #8b95a1;
+}
+
+.dark .purchase-ledger-profit-sub-label {
+  color: var(--muted);
+}
+
+.purchase-ledger-profit-sub-secondary .purchase-ledger-profit-sub-label {
+  margin-bottom: 0.125rem;
+}
+
+.purchase-ledger-profit-amount {
+  width: 100%;
+  margin-top: 0;
+  font-size: clamp(0.875rem, 11.5cqi, 1.125rem);
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  color: #4e5968;
+  font-variant-numeric: tabular-nums;
+  overflow: visible;
+  white-space: normal;
+  word-break: keep-all;
+}
+
+.dark .purchase-ledger-profit-amount {
+  color: color-mix(in srgb, var(--foreground) 72%, var(--muted));
+}
+
+.purchase-ledger-profit-sub-total {
+  background-color: #e8f3ff;
+}
+
+.dark .purchase-ledger-profit-sub-total {
+  background-color: color-mix(in srgb, #3182f6 12%, var(--surface-subtle));
+}
+
+.purchase-ledger-profit-sub-total .purchase-ledger-profit-sub-label {
+  margin-bottom: 0.25rem;
+}
+
+.purchase-ledger-profit-total {
+  width: 100%;
+  margin-top: 0;
+  font-size: clamp(1rem, 14cqi, 1.625rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  text-align: center;
+  color: #3182f6;
+  font-variant-numeric: tabular-nums;
+  overflow: visible;
+  white-space: normal;
+  word-break: keep-all;
+}
+
+.dark .purchase-ledger-profit-total {
+  color: #3182f6;
+}
+
+.purchase-ledger-block-gap {
+  margin-top: 2rem;
+}
+
+/* 월 매출장부 — 여백·통계 축소로 표 가로·세로 여유 확보 */
+.sales-ledger-compact {
+  margin-top: -0.5rem;
+}
+
+/* 매출등록 — 매출장부처럼 전체 너비·컴팩트 여백 */
+.sales-registration-compact {
+  margin-top: -0.25rem;
+}
+
+.sales-registration-compact .purchase-ledger-work-card {
+  padding: 0.75rem 0.875rem;
+}
+
+@media (min-width: 1024px) {
+  .sales-registration-compact .purchase-ledger-work-card {
+    padding: 0.875rem 1rem;
+  }
+}
+
+.sales-registration-compact .purchase-ledger-header-desc {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.sales-ledger-compact .purchase-ledger-work-card {
+  padding: 1rem 1.125rem;
+}
+
+@media (min-width: 640px) {
+  .sales-ledger-compact .purchase-ledger-work-card {
+    padding: 1.125rem 1.25rem;
+  }
+}
+
+.sales-ledger-compact .purchase-ledger-block-gap {
+  margin-top: 1.25rem;
+}
+
+.sales-ledger-compact .purchase-ledger-stat-block {
+  margin-top: 1.25rem;
+}
+
+.sales-ledger-compact .purchase-ledger-stat-value {
+  font-size: clamp(1.625rem, 3.25vw, 2rem);
+}
+
+.sales-ledger-compact .purchase-ledger-profit-panel {
+  margin-top: 1rem;
+}
+
+.sales-ledger-compact .purchase-ledger-header-desc {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.sales-ledger-compact .sales-ledger-table-scroll {
+  padding-top: 0.375rem;
+}
+
+.sales-ledger-compact table.sales-ledger-table {
+  font-size: 0.6875rem;
+}
+
+/* 월 매출장부 — 미수 행: 테두리 없이 은은한 배경 + 연한 pill */
+.sales-ledger-receivable-row {
+  background-color: #fff0f0;
+}
+
+.sales-ledger-receivable-row:hover {
+  background-color: #ffe4e4;
+}
+
+.dark .sales-ledger-receivable-row {
+  background-color: rgba(239, 68, 68, 0.06);
+}
+
+.dark .sales-ledger-receivable-row:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.sales-ledger-receivable-pill {
+  background-color: #fee2e2;
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.dark .sales-ledger-receivable-pill {
+  background-color: rgba(254, 226, 226, 0.14);
+  color: #f87171;
+}
+
+/* 월매입 장부 표 — 글자 약간 확대(블록 내 넘침 방지) */
+.monthly-purchase-ledger-table {
+  font-size: 0.8125rem;
+  line-height: 1.35;
+}
+
+.monthly-purchase-ledger-table th,
+.monthly-purchase-ledger-table td {
+  padding: 0.3125rem 0.375rem;
+}
+
+.monthly-purchase-ledger-table thead th {
+  font-size: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.monthly-purchase-ledger-table tfoot td {
+  font-size: 0.8125rem;
+}
+
+/* 월매입 장부 표 — 마진 가독성(다크) · 열 여백 균형 */
+.monthly-purchase-ledger-margin {
+  color: #92400e;
+  font-weight: 600;
+}
+
+.dark .monthly-purchase-ledger-margin {
+  color: #fbbf24;
+}
+
+.monthly-purchase-ledger-margin-negative {
+  color: #be123c !important;
+}
+
+.dark .monthly-purchase-ledger-margin-negative {
+  color: #fb7185 !important;
+}
+
+/* 월 매출장부 — 마진 열만 월매입 장부와 동일 톤·크기 */
+.sales-ledger-compact table.sales-ledger-table td.monthly-purchase-ledger-margin {
+  color: #92400e;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.dark .sales-ledger-compact table.sales-ledger-table td.monthly-purchase-ledger-margin:not(.monthly-purchase-ledger-margin-negative) {
+  color: #fbbf24;
+}
+
+/* 월 매출장부 — 음수 마진: 라이트에서 양수(앰버)와 확실히 구분 */
+.sales-ledger-compact table.sales-ledger-table td.monthly-purchase-ledger-margin-negative {
+  color: #dc2626 !important;
+}
+
+.dark .sales-ledger-compact table.sales-ledger-table td.monthly-purchase-ledger-margin-negative {
+  color: #fb7185 !important;
+}
+
+/* 월 매출장부 — 업체 '매입' 행 공임 칸 (표 셀과 동일 톤, 다크모드 가독) */
+.sales-ledger-labor-purchase {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.sales-ledger-labor-purchase::placeholder {
+  color: var(--muted);
+  font-weight: 500;
+  opacity: 1;
+}
+
+.sales-ledger-labor-purchase:focus {
+  border-color: var(--border);
+  background: var(--card);
+  color: var(--foreground);
+}
+
+.dark .sales-ledger-labor-purchase,
+.dark .sales-ledger-labor-purchase::placeholder {
+  color: color-mix(in srgb, var(--foreground) 58%, transparent);
+}
+
+.monthly-purchase-ledger-table col.monthly-purchase-ledger-col-margin,
+.monthly-purchase-ledger-table col.monthly-purchase-ledger-col-quote {
+  width: 5rem;
+}
+
+/* 매입내역 — 전화번호·중량(g) 열 간격·너비 균형 */
+.monthly-purchase-ledger-table col.purchase-ledger-col-phone {
+  width: 5.5rem;
+}
+
+.monthly-purchase-ledger-table col.purchase-ledger-col-weight {
+  width: 4.75rem;
+}
+
+.monthly-purchase-ledger-table th.purchase-ledger-col-phone,
+.monthly-purchase-ledger-table td.purchase-ledger-col-phone {
+  padding-right: 0.625rem;
+}
+
+.monthly-purchase-ledger-table th.purchase-ledger-col-weight,
+.monthly-purchase-ledger-table td.purchase-ledger-col-weight {
+  padding-left: 0.625rem;
+}
+
+/* 매출내역 표 — 열 너비·여백 통일 (넘침 방지) */
+table.sales-history-ledger-table col.sales-history-col-quote {
+  width: 3.75rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-date {
+  width: 3.75rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-customer {
+  width: 3.25rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-phone {
+  width: 5.25rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-kind {
+  width: 2.5rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-code {
+  width: 3rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-product {
+  width: 4rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-qty {
+  width: 2rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-weight {
+  width: 3.5rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-price {
+  width: 4.5rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-payment {
+  width: 2.5rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-deposit {
+  width: 4.25rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-receivable {
+  width: 4rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-vendor {
+  width: 3.25rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-fulfillment {
+  width: 3rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-size {
+  width: 2.25rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-io {
+  width: 8rem;
+}
+
+table.sales-history-ledger-table col.sales-history-col-edit {
+  width: 2.75rem;
+}
+
+table.sales-history-ledger-table th.sales-history-col-phone,
+table.sales-history-ledger-table td.sales-history-col-phone {
+  padding-right: 0.5rem;
+}
+
+table.sales-history-ledger-table th.sales-history-col-weight,
+table.sales-history-ledger-table td.sales-history-col-weight {
+  padding-left: 0.5rem;
+}
+
+table.sales-history-ledger-table th.sales-history-col-io,
+table.sales-history-ledger-table td.sales-history-col-io {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  overflow: visible;
+}
+
+table.sales-history-ledger-table td.sales-history-col-io .sales-history-io-row {
+  gap: 0.375rem;
+  justify-content: space-evenly;
+}
+
+table.sales-history-ledger-table .sales-history-io-input {
+  width: 1.6rem;
+  flex-shrink: 0;
+}
+
+table.sales-history-ledger-table td:not(.sales-history-col-date):not(.sales-history-col-io):not(.sales-history-col-edit) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+table.sales-history-ledger-table td.sales-history-col-edit {
+  overflow: visible;
+  white-space: nowrap;
+}
+
+table.sales-history-ledger-table td.sales-history-col-date {
+  overflow: hidden;
+  line-height: 1.2;
+}
+
+table.sales-history-ledger-table thead th.sales-history-col-io {
+  font-size: 0.6875rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+/* Excel-style ledger cell selection */
+table.ledger-cell-select td.ledger-cell-selected {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--primary) 88%, transparent);
+  background-color: color-mix(in srgb, var(--primary) 12%, var(--card));
+}
+
+.dark table.ledger-cell-select td.ledger-cell-selected {
+  background-color: color-mix(in srgb, var(--primary) 18%, var(--card));
+}

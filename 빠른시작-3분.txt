@@ -1,0 +1,21 @@
+■ gold-ledger 새 매장 — 최단 3단계
+
+① Supabase (5분)
+   https://supabase.com/dashboard/new
+   → New project → 비밀번호 저장
+   → Settings → API: URL + anon key 복사
+   → Settings → Database → Connection string (URI) 복사
+
+② 이 폴더 .env.local 에 3줄 붙여넣기
+   NEXT_PUBLIC_SUPABASE_URL=...
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+   DATABASE_URL=...
+
+③ Cursor 터미널 (이 폴더 열린 상태)
+   .\빠른세팅.ps1
+
+끝나면:
+   npm run dev  → localhost 확인
+   GitHub 새 repo + Vercel Import → 배포 URL에서 가입
+
+※ 친구 Supabase/Vercel 키 쓰지 마세요 (데이터 겹침)

@@ -1,0 +1,33 @@
+name: Sync Korean gold quotes
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm ci
+      - name: Fetch goldgold → Vercel ingest (Supabase 실시간 캐시)
+        env:
+          KOREAN_GOLD_SYNC_SECRET: ${{ secrets.KOREAN_GOLD_SYNC_SECRET }}
+          KOREAN_GOLD_INGEST_URL: ${{ secrets.KOREAN_GOLD_INGEST_URL }}
+          KOREAN_GOLD_PROXY_URL: ${{ secrets.KOREAN_GOLD_PROXY_URL }}
+        run: node scripts/push-korean-gold-quote-ingest.mjs
+        continue-on-error: true
+      - name: Update fallback JSON (배포 없이 raw URL 백업)
+        run: node scripts/update-quote-fallback.mjs
+      - name: Commit fallback if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          node scripts/commit-quote-fallback-if-changed.mjs

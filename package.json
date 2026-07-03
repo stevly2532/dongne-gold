@@ -1,0 +1,49 @@
+{
+  "name": "gold-ledger",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "db:apply-purchase-audit": "node scripts/apply-sql.mjs supabase/migration_purchase_audit.sql",
+    "db:apply-daily-purchase-prices": "node scripts/apply-sql.mjs supabase/migration_daily_purchase_prices.sql",
+    "db:apply-inventory-sales-gold-price": "node scripts/apply-sql.mjs supabase/migration_inventory_sales_gold_price_per_don.sql",
+    "db:apply-arrival-sms-log": "node scripts/apply-sql.mjs supabase/migration_arrival_sms_log.sql",
+    "db:apply-knk-earring-suffix": "node scripts/apply-sql.mjs supabase/migration_knk_product_code_earring_suffix.sql",
+    "db:apply-knk-dau-to-gita": "node scripts/apply-sql.mjs supabase/migration_knk_dau_to_gita_vendor.sql",
+    "db:apply-tongsang-daily": "node scripts/apply-sql.mjs supabase/migration_tongsang_daily_entries.sql",
+    "db:apply-korean-gold-quote-cache": "node scripts/apply-sql.mjs supabase/migration_korean_gold_quote_cache.sql",
+    "db:apply-daily-closing-vault-misc": "node scripts/apply-sql.mjs supabase/migration_branch_daily_closings_vault_misc.sql",
+    "db:apply-daily-closings": "node scripts/apply-sql.mjs supabase/migration_branch_daily_closings.sql",
+    "db:bootstrap-new-shop": "node scripts/bootstrap-new-shop.mjs",
+    "export:independent-copy": "node scripts/export-independent-copy.mjs",
+    "sync:korean-gold-quotes": "node scripts/sync-korean-gold-quotes.mjs",
+    "local-korean-gold-proxy": "node scripts/local-korean-gold-proxy.mjs",
+    "push:korean-gold-quote-ingest": "node scripts/push-korean-gold-quote-ingest.mjs",
+    "update:quote-fallback": "node scripts/update-quote-fallback.mjs",
+    "prebuild": "node scripts/update-quote-fallback.mjs"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.10.2",
+    "@supabase/supabase-js": "^2.103.0",
+    "next": "16.2.3",
+    "pretendard": "^1.3.9",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "tesseract.js": "^7.0.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.3",
+    "pg": "^8.14.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
