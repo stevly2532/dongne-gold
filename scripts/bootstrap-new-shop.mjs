@@ -52,6 +52,7 @@ const SQL_FILES = [
   "supabase/migration_profiles_email.sql",
   "supabase/migration_knk_dau_to_gita_vendor.sql",
   "supabase/migration_knk_product_code_earring_suffix.sql",
+  "supabase/migration_all_public_grants.sql",
 ];
 
 function loadEnvLocal() {

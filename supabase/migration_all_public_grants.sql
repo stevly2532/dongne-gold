@@ -1,0 +1,33 @@
+-- Grants for all public tables (run after bootstrap / reset)
+
+grant select, insert, update, delete on table public.arrival_sms_log to authenticated;
+grant all on table public.arrival_sms_log to service_role;
+grant select, insert, update, delete on table public.as_ledgers to authenticated;
+grant all on table public.as_ledgers to service_role;
+grant select, insert, update, delete on table public.branch_daily_closings to authenticated;
+grant all on table public.branch_daily_closings to service_role;
+grant select, insert, update, delete on table public.branch_vault_snapshots to authenticated;
+grant all on table public.branch_vault_snapshots to service_role;
+grant select, insert, update, delete on table public.branches to authenticated;
+grant all on table public.branches to service_role;
+grant select, insert, update, delete on table public.daily_purchase_prices to authenticated;
+grant all on table public.daily_purchase_prices to service_role;
+grant select, insert, update, delete on table public.inventory_audit_log to authenticated;
+grant all on table public.inventory_audit_log to service_role;
+grant select, insert, update, delete on table public.inventory_items to authenticated;
+grant all on table public.inventory_items to service_role;
+grant select, insert, update, delete on table public.jongro_daily_quotes to authenticated;
+grant all on table public.jongro_daily_quotes to service_role;
+grant select, insert, update, delete on table public.korean_gold_quote_cache to authenticated;
+grant all on table public.korean_gold_quote_cache to service_role;
+grant select, insert, update, delete on table public.product_labor_fees to authenticated;
+grant all on table public.product_labor_fees to service_role;
+grant select, insert, update, delete on table public.profiles to authenticated;
+grant all on table public.profiles to service_role;
+grant select, insert, update, delete on table public.purchase_audit_log to authenticated;
+grant all on table public.purchase_audit_log to service_role;
+grant select, insert, update, delete on table public.purchases to authenticated;
+grant all on table public.purchases to service_role;
+grant select, insert, update, delete on table public.tongsang_daily_entries to authenticated;
+grant all on table public.tongsang_daily_entries to service_role;
+grant usage, select on all sequences in schema public to authenticated, service_role;
