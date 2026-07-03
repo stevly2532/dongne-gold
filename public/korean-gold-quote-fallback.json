@@ -1,47 +1,47 @@
 {
   "ok": true,
-  "fetchedAt": "2026-07-01T05:08:27.400Z",
-  "quoteAt": "2026-07-01 00:00:00",
+  "fetchedAt": "2026-07-03T14:55:54.639Z",
+  "quoteAt": "2026-07-03 00:00:00",
   "rows": {
     "pure": {
-      "buy": 875000,
-      "buyDeltaPct": -0.46,
-      "buyDeltaAmt": -4000,
-      "sell": 728000,
-      "sellDeltaPct": -0.27,
-      "sellDeltaAmt": -2000
+      "buy": 901000,
+      "buyDeltaPct": 1.35,
+      "buyDeltaAmt": 12000,
+      "sell": 754000,
+      "sellDeltaPct": 1.89,
+      "sellDeltaAmt": 14000
     },
     "k18": {
       "buy": null,
       "buyDeltaPct": null,
       "buyDeltaAmt": null,
-      "sell": 535000,
-      "sellDeltaPct": -0.26,
-      "sellDeltaAmt": -1400
+      "sell": 555000,
+      "sellDeltaPct": 1.9,
+      "sellDeltaAmt": 10300
     },
     "k14": {
       "buy": null,
       "buyDeltaPct": null,
       "buyDeltaAmt": null,
-      "sell": 415000,
-      "sellDeltaPct": -0.26,
-      "sellDeltaAmt": -1100
+      "sell": 430000,
+      "sellDeltaPct": 1.9,
+      "sellDeltaAmt": 8000
     },
     "white": {
-      "buy": 337000,
-      "buyDeltaPct": -1.46,
-      "buyDeltaAmt": -5000,
-      "sell": 264000,
-      "sellDeltaPct": -1.12,
-      "sellDeltaAmt": -3000
+      "buy": 357000,
+      "buyDeltaPct": 3.48,
+      "buyDeltaAmt": 12000,
+      "sell": 279000,
+      "sellDeltaPct": 3.33,
+      "sellDeltaAmt": 9000
     },
     "silver": {
-      "buy": 12100,
-      "buyDeltaPct": -0.58,
-      "buyDeltaAmt": -70,
-      "sell": 9710,
-      "sellDeltaPct": -0.61,
-      "sellDeltaAmt": -60
+      "buy": 12700,
+      "buyDeltaPct": 3.42,
+      "buyDeltaAmt": 420,
+      "sell": 10320,
+      "sellDeltaPct": 3.51,
+      "sellDeltaAmt": 350
     }
   }
 }

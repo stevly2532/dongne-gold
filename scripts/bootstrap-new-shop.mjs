@@ -74,6 +74,10 @@ function loadEnvLocal() {
   }
 }
 
+function stripBom(text) {
+  return text.charCodeAt(0) === 0xfeff ? text.slice(1) : text;
+}
+
 function readSqlFile(rel) {
   const file = path.join(root, rel);
   if (!fs.existsSync(file)) {
@@ -81,9 +85,15 @@ function readSqlFile(rel) {
   }
   const buf = fs.readFileSync(file);
   if (buf.length >= 2 && buf[0] === 0xff && buf[1] === 0xfe) {
-    return buf.slice(2).toString("utf16le");
+    return stripBom(buf.slice(2).toString("utf16le"));
   }
-  return buf.toString("utf8");
+  if (buf.length >= 4 && buf[1] === 0x00 && buf[3] === 0x00) {
+    return stripBom(buf.toString("utf16le"));
+  }
+  if (buf.length >= 3 && buf[0] === 0xef && buf[1] === 0xbb && buf[2] === 0xbf) {
+    return buf.slice(3).toString("utf8");
+  }
+  return stripBom(buf.toString("utf8"));
 }
 
 function stripLineComments(sql) {
@@ -123,11 +133,8 @@ async function main() {
     for (const rel of SQL_FILES) {
       console.error(`\n=== ${rel} ===`);
       const sql = readSqlFile(rel);
-      const statements = splitStatements(sql);
-      for (let i = 0; i < statements.length; i++) {
-        await client.query(statements[i]);
-        console.error(`  OK ${i + 1}/${statements.length}`);
-      }
+      await client.query(sql);
+      console.error("  OK (whole file)");
     }
   } finally {
     await client.end();

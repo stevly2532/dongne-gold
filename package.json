@@ -18,6 +18,7 @@
     "db:apply-daily-closing-vault-misc": "node scripts/apply-sql.mjs supabase/migration_branch_daily_closings_vault_misc.sql",
     "db:apply-daily-closings": "node scripts/apply-sql.mjs supabase/migration_branch_daily_closings.sql",
     "db:bootstrap-new-shop": "node scripts/bootstrap-new-shop.mjs",
+    "db:reset-fresh": "node scripts/reset-fresh-db.mjs",
     "export:independent-copy": "node scripts/export-independent-copy.mjs",
     "sync:korean-gold-quotes": "node scripts/sync-korean-gold-quotes.mjs",
     "local-korean-gold-proxy": "node scripts/local-korean-gold-proxy.mjs",
