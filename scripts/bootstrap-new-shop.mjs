@@ -18,6 +18,7 @@ const root = path.join(__dirname, "..");
 /** Fresh DB bootstrap order. clear_all_purchases.sql / schema_inventory.sql 은 제외. */
 const SQL_FILES = [
   "supabase/schema.sql",
+  "supabase/migration_core_grants.sql",
   "supabase/setup_inventory_items.sql",
   "supabase/migration_purchase_gold.sql",
   "supabase/migration_purchase_audit.sql",
